@@ -94,13 +94,15 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
+alias s="git status"
+
 function backup() {
   # expect file-name as input; e.g .zshrc
  cp "$1"{,-backup."$(date +%Y-%m-%d_%H_%M_%S)"} 
 }
 function deploy-computer(){
   backup .zshrc
-  cp ~/$CODE_FOLDER/osx-computer/.zshrc ~/.zshrc
+  cd ~/ && cp $CODE_FOLDER/osx-computer/.zshrc ~/.zshrc
 }
 function save-computer-config(){
   cp ~/.zshrc $CODE_FOLDER/osx-computer/.zshrc

@@ -1,0 +1,16 @@
+code --install-extension DavidAnson.vscode-markdownlint
+code --install-extension PKief.material-icon-theme
+code --install-extension PeterJausovec.vscode-docker
+code --install-extension christian-kohler.npm-intellisense
+code --install-extension dbaeumer.vscode-eslint
+code --install-extension dzannotti.vscode-babel-coloring
+code --install-extension eamodio.gitlens
+code --install-extension eg2.vscode-npm-script
+code --install-extension esbenp.prettier-vscode
+code --install-extension jbachhardie.flow-ls
+code --install-extension joelday.docthis
+code --install-extension mjmcloug.vscode-elixir
+code --install-extension msjsdiag.debugger-for-chrome
+code --install-extension pflannery.vscode-versionlens
+code --install-extension spywhere.guides
+code --install-extension shinnn.stylelint

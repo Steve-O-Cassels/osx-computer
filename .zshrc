@@ -3,7 +3,8 @@
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
-CODE_FOLDER=$HOME/fun
+TRAINING_FOLDER=$HOME/training
+DROPBOX_FOLDER=$HOME/Dropbox
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
@@ -40,7 +41,7 @@ ZSH_THEME="robbyrussell"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -61,6 +62,11 @@ ZSH_THEME="robbyrussell"
 # Add wisely, as too many plugins slow down shell startup.
 plugins=(
   git
+  node
+  npm
+  npx
+  nvm
+  zsh-syntax-highlighting
 )
 
 source $ZSH/oh-my-zsh.sh
@@ -94,16 +100,84 @@ source $ZSH/oh-my-zsh.sh
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias s="git status"
+# Add all highlighting to zsh syntax hightlights
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern)
+
+# Taken from https://github.com/zsh-users/fizsh/blob/master/fizsh-dev/scripts/fizsh-miscellaneous.zsh
+################################################
+#
+# Rebind tab so that it uses syntax-highlighting
+#
+# This is a bug in the syntax highlighting system (https://github.com/zsh-users/zsh-syntax-highlighting/issues/102)
+# We work around it by calling all types of highlighters explictily
+#
+
+function _fizsh-expand-or-complete-and-highlight() {
+  zle expand-or-complete
+  _zsh_highlight_highlighter_brackets_paint
+  _zsh_highlight_highlighter_main_paint
+  _zsh_highlight_highlighter_cursor_paint
+  _zsh_highlight_highlighter_pattern_paint
+  _zsh_highlight_highlighter_root_paint
+}
 
 function backup() {
   # expect file-name as input; e.g .zshrc
  cp "$1"{,-backup."$(date +%Y-%m-%d_%H_%M_%S)"} 
 }
-function deploy-computer(){
-  backup .zshrc
-  cd ~/ && cp $CODE_FOLDER/osx-computer/.zshrc ~/.zshrc
+function zshrc-deploy-from-repo(){
+  backup ~/.zshrc
+  cp $TRAINING_FOLDER/osx-computer/.zshrc ~/.zshrc
 }
-function save-computer-config(){
-  cp ~/.zshrc $CODE_FOLDER/osx-computer/.zshrc
+
+function zshrc-copy-to-repo(){
+  cp ~/.zshrc $TRAINING_FOLDER/osx-computer/.zshrc
 }
+alias zshrc-copy-to-repo="zshrc-copy-to-repo"
+
+function training-to-dropbox(){
+  # remove node_modules first
+  find $TRAINING_FOLDER -type d -name "node_modules" -exec rm -rf {} +
+  cp -r $TRAINING_FOLDER $DROPBOX_FOLDER
+}
+alias training-push="training-to-dropbox"
+
+function training-from-dropbox(){
+  cp $DROPBOX_FOLDER $TRAINING_FOLDER 
+}
+alias training-pull="training-from-dropbox"
+
+function training() {
+  cd $TRAINING_FOLDER/"$@" && code .
+}
+
+function find-folder() {
+  find ~/ -name "$@" -type d
+}
+function zsh-help(){
+  google-chrome https://github.com/robbyrussell/oh-my-zsh/wiki/Cheatsheet
+}
+
+alias s="git status"
+function config-the-git(){
+  git config --global --add rebase.autostash true # don't make me stash manually and then pop it on git pull (rebase default)
+}
+function gitlog-search(){
+  git log --grep="$@" --format=fuller
+}
+
+# Colors
+ESC_SEQ="\x1b["
+RESET=$ESC_SEQ"39;49;00m"
+RED=$ESC_SEQ"31;01m"
+GREEN=$ESC_SEQ"32;01m"
+YELLOW=$ESC_SEQ"33;01m"
+BLUE=$ESC_SEQ"34;01m"
+MAGENTA=$ESC_SEQ"35;01m"
+CYAN=$ESC_SEQ"36;01m"
+
+export NVM_DIR="$HOME/.nvm"
+[ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
+[ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
+
+source ~/.oh-my-zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh

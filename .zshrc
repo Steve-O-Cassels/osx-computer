@@ -129,7 +129,9 @@ function zshrc-deploy-from-repo(){
   backup ~/.zshrc
   cp $TRAINING_FOLDER/osx-computer/.zshrc ~/.zshrc
 }
-
+function save-computer-config(){
+  cp ~/.zshrc $TRAINING_FOLDER/osx-computer/.zshrc
+}
 function zshrc-copy-to-repo(){
   cp ~/.zshrc $TRAINING_FOLDER/osx-computer/.zshrc
 }
@@ -138,12 +140,12 @@ alias zshrc-copy-to-repo="zshrc-copy-to-repo"
 function training-to-dropbox(){
   # remove node_modules first
   find $TRAINING_FOLDER -type d -name "node_modules" -exec rm -rf {} +
-  cp -r $TRAINING_FOLDER $DROPBOX_FOLDER
+  cp -r $TRAINING_FOLDER/ $DROPBOX_FOLDER/training
 }
 alias training-push="training-to-dropbox"
 
 function training-from-dropbox(){
-  cp $DROPBOX_FOLDER $TRAINING_FOLDER 
+  cp -r $DROPBOX_FOLDER/training/ $TRAINING_FOLDER 
 }
 alias training-pull="training-from-dropbox"
 

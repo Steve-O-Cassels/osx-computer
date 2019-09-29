@@ -4,6 +4,7 @@
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
 TRAINING_FOLDER=$HOME/training
+GIT_FOLDER=$HOME/repos
 DROPBOX_FOLDER=$HOME/Dropbox
 
 # Set name of the theme to load. Optionally, if you set this to "random"
@@ -127,30 +128,38 @@ function backup() {
 }
 function zshrc-deploy-from-repo(){
   backup ~/.zshrc
-  cp $TRAINING_FOLDER/osx-computer/.zshrc ~/.zshrc
+  cp $GIT_FOLDER/osx-computer/.zshrc ~/.zshrc
 }
 function save-computer-config(){
-  cp ~/.zshrc $TRAINING_FOLDER/osx-computer/.zshrc
+  cp ~/.zshrc $GIT_FOLDER/osx-computer/.zshrc
 }
 function zshrc-copy-to-repo(){
-  cp ~/.zshrc $TRAINING_FOLDER/osx-computer/.zshrc
+  cp ~/.zshrc $GIT_FOLDER/osx-computer/.zshrc
 }
 alias zshrc-copy-to-repo="zshrc-copy-to-repo"
 
 function training-to-dropbox(){
   # remove node_modules first
   find $TRAINING_FOLDER -type d -name "node_modules" -exec rm -rf {} +
-  cp -r $TRAINING_FOLDER/ $DROPBOX_FOLDER/training
+  cp -a -u -v $TRAINING_FOLDER/. $DROPBOX_FOLDER/training
 }
 alias training-push="training-to-dropbox"
 
 function training-from-dropbox(){
-  cp -r $DROPBOX_FOLDER/training/ $TRAINING_FOLDER 
+  # -a : preserve structure and attributes but not directory structure
+  # -p : preserve attributes
+  # -R : copy directory and sub-tree
+  # -v : be verbose with output
+  cp -a -p -R -v $DROPBOX_FOLDER/training/. $TRAINING_FOLDER/ 
 }
 alias training-pull="training-from-dropbox"
 
 function training() {
   cd $TRAINING_FOLDER/"$@" && code .
+}
+
+function repos() {
+  cd $GIT_FOLDER/"$@" && code .
 }
 
 function find-folder() {

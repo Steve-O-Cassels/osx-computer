@@ -6,7 +6,7 @@ export ZSH=$HOME/.oh-my-zsh
 TRAINING_FOLDER=$HOME/training
 GIT_FOLDER=$HOME/repos
 DROPBOX_FOLDER=$HOME/Dropbox
-
+DIARY_FOLDER=$DROPBOX_FOLDER/DailyNotes
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
@@ -161,7 +161,9 @@ alias training-pull="training-from-dropbox"
 function training() {
   cd $TRAINING_FOLDER/"$@" && code .
 }
-
+function diary(){
+  cd $DIARY_FOLDER && code Diary.code-workspace
+}
 function repos() {
   cd $GIT_FOLDER/"$@" && code .
 }
